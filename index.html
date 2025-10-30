@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JO System - Dashboard</title>
+    </head>
+<body>
+
+    <h1>Job Order (JO) System</h1>
+
+    <div id="create-jo-container">
+        <h2>Create New Job Order</h2>
+
+        <form id="joForm">
+            <h3>Customer Details</h3>
+            <label for="customerName">Customer Name:</label>
+            <input type="text" id="customerName" required>
+
+            <label for="customerContact">Contact Number:</label>
+            <input type="text" id="customerContact">
+
+            <h3>Unit Details</h3>
+            <label for="unitSerial">Serial Number:</label>
+            <input type="text" id="unitSerial" required>
+
+            <label for="unitModel">Model:</label>
+            <input type="text" id="unitModel" required>
+
+            <label for="unitBrand">Brand:</label>
+            <select id="unitBrand" required>
+                <option value="">--Select Brand--</option>
+                <option value="HP">HP</option>
+                <option value="ASUS">ASUS</option>
+                <option value="HP Printer">HP Printer</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <h3>Job Order Details</h3>
+            <label for="warrantyType">Warranty Type:</label>
+            <select id="warrantyType" required>
+                <option value="">--Select Type--</option>
+                <option value="IW">IW (In-Warranty)</option>
+                <option value="OOW">OOW (Out-of-Warranty)</option>
+                <option value="Void">Void</option>
+            </select>
+
+            <label for="dateOfPurchase">Date of Purchase:</label>
+            <input type="date" id="dateOfPurchase">
+
+            <label for="problemReported">Problem Reported:</label>
+            <textarea id="problemReported" rows="3"></textarea>
+
+            <h3>File Links (from Google Drive)</h3>
+            <label for="receiptLink">Receipt Link (Paste Google Drive link):</label>
+            <input type="url" id="receiptLink" placeholder="https://drive.google.com/...">
+
+            <label for="proofLink">Proof Link (Optional):</label>
+            <input type="url" id="proofLink" placeholder="https://drive.google.com/...">
+
+            <br><br>
+            <button type="submit" id="submitButton">Create Job Order</button>
+        </form>
+
+        <div id="message"></div>
+    </div>
+
+    </body>
+</html>
