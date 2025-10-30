@@ -4,29 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JO System - Dashboard</title>
-    </head>
+</head>
 <body>
 
     <h1>Job Order (JO) System</h1>
 
     <div id="create-jo-container">
         <h2>Create New Job Order</h2>
-
+        
         <form id="joForm">
             <h3>Customer Details</h3>
             <label for="customerName">Customer Name:</label>
             <input type="text" id="customerName" required>
-
+            
             <label for="customerContact">Contact Number:</label>
             <input type="text" id="customerContact">
 
             <h3>Unit Details</h3>
             <label for="unitSerial">Serial Number:</label>
             <input type="text" id="unitSerial" required>
-
+            
             <label for="unitModel">Model:</label>
             <input type="text" id="unitModel" required>
-
+            
             <label for="unitBrand">Brand:</label>
             <select id="unitBrand" required>
                 <option value="">--Select Brand--</option>
@@ -44,7 +44,7 @@
                 <option value="OOW">OOW (Out-of-Warranty)</option>
                 <option value="Void">Void</option>
             </select>
-
+            
             <label for="dateOfPurchase">Date of Purchase:</label>
             <input type="date" id="dateOfPurchase">
 
@@ -54,16 +54,86 @@
             <h3>File Links (from Google Drive)</h3>
             <label for="receiptLink">Receipt Link (Paste Google Drive link):</label>
             <input type="url" id="receiptLink" placeholder="https://drive.google.com/...">
-
+            
             <label for="proofLink">Proof Link (Optional):</label>
             <input type="url" id="proofLink" placeholder="https://drive.google.com/...">
 
             <br><br>
             <button type="submit" id="submitButton">Create Job Order</button>
         </form>
-
+        
         <div id="message"></div>
     </div>
 
+    <script>
+        // --- Configuration ---
+        // Ito ang iyong secret URL
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwLjWs22_NQoMJ29umXzG4NtEYymEuECc6IPUsPpgJHZW2xPjpyghYDVA_Gkgsa851d0A/exec"; 
+        // ---------------------
+
+        // --- Get elements from the HTML ---
+        const joForm = document.getElementById("joForm");
+        const submitButton = document.getElementById("submitButton");
+        const messageDiv = document.getElementById("message");
+
+        // --- Add event listener to the form ---
+        joForm.addEventListener("submit", function(e) {
+            e.preventDefault(); // Prevent default form submission
+            
+            // 1. Show loading state
+            submitButton.disabled = true;
+            submitButton.textContent = "Saving... Please wait...";
+            messageDiv.textContent = "";
+            
+            // 2. Collect all data from the form
+            const formData = {
+                action: "createJobOrder", // This tells our Google Script what to do
+                customerName: document.getElementById("customerName").value,
+                customerContact: document.getElementById("customerContact").value,
+                unitSerial: document.getElementById("unitSerial").value,
+                unitModel: document.getElementById("unitModel").value,
+                unitBrand: document.getElementById("unitBrand").value,
+                warrantyType: document.getElementById("warrantyType").value,
+                dateOfPurchase: document.getElementById("dateOfPurchase").value,
+                problemReported: document.getElementById("problemReported").value,
+                receiptLink: document.getElementById("receiptLink").value,
+                proofLink: document.getElementById("proofLink").value
+            };
+
+            // 3. Send the data to Google Apps Script
+            fetch(SCRIPT_URL, {
+                method: "POST",
+                mode: "cors", // Required for cross-origin requests
+                body: JSON.stringify(formData),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // 4. Handle the response
+                if(data.status === "success") {
+                    // SUCCESS!
+                    const newID = data.data.newJobID;
+                    messageDiv.textContent = `Success! New Job Order Created: JO# ${newID}`;
+                    messageDiv.style.color = "green";
+                    joForm.reset(); // Clear the form
+                } else {
+                    // ERROR!
+                    throw new Error(data.message || "Unknown error occurred.");
+                }
+            })
+            .catch(error => {
+                // 4b. Handle fetch error
+                messageDiv.textContent = `Error: ${error.message}`;
+                messageDiv.style.color = "red";
+            })
+            .finally(() => {
+                // 5. Reset button state
+                submitButton.disabled = false;
+                submitButton.textContent = "Create Job Order";
+            });
+        });
+    </script>
     </body>
 </html>
