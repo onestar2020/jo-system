@@ -1,5 +1,5 @@
 // --- Configuration ---
-// PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE
+// Ito ang iyong secret URL
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwLjWs22_NQoMJ29umXzG4NtEYymEuECc6IPUsPpgJHZW2xPjpyghYDVA_Gkgsa851d0A/exec"; 
 // ---------------------
 
@@ -11,12 +11,12 @@ const messageDiv = document.getElementById("message");
 // --- Add event listener to the form ---
 joForm.addEventListener("submit", function(e) {
     e.preventDefault(); // Prevent default form submission
-
+    
     // 1. Show loading state
     submitButton.disabled = true;
     submitButton.textContent = "Saving... Please wait...";
     messageDiv.textContent = "";
-
+    
     // 2. Collect all data from the form
     const formData = {
         action: "createJobOrder", // This tells our Google Script what to do
